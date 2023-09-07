@@ -1,9 +1,12 @@
 http = require('http');
+// File system
 fs = require('fs');
+url = require('url');
 
 // Create server
 http.createServer((req, res) => {
-  fs.readFile('index.html', (err, data) => {
+  //console.log(url.parse(req.url, true).query.nom);
+  fs.readFile('index.html', 'utf-8', (err, data) => {
     if (err) {
       res.writeHead(404);
       res.write('File not found');
@@ -12,7 +15,7 @@ http.createServer((req, res) => {
       res.writeHead(200, {
         'Content-Type': 'text/html, charset=utf-8'
       });
-      res.write(data);
+      res.write(data.replace('****', url.parse(req.url, true).query.nom));
     }
     res.end();
   });
