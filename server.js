@@ -1,17 +1,21 @@
 http = require('http');
+fs = require('fs');
 
 // Create server
 http.createServer((req, res) => {
-  // Set response header
-  res.writeHead(200, {
-    'Content-Type': 'text/json'
+  fs.readFile('index.html', (err, data) => {
+    if (err) {
+      res.writeHead(404);
+      res.write('File not found');
+    }
+    else {
+      res.writeHead(200, {
+        'Content-Type': 'text/html, charset=utf-8'
+      });
+      res.write(data);
+    }
+    res.end();
+  }).listen(8080, () => {
+    console.log('Server is running...');
   });
-  // Write response in the terminal
-  console.log('Request received');
-  // Write response in the browser
-  res.write('{ "name": "John", "age": 30, "city": "New York"}')
-  // End response
-  res.end();
-}).listen(8080, () => {
-  console.log('Server is running...');
 });
